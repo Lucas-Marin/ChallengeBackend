@@ -30,7 +30,7 @@ class ProjectManajer {
   }
 
   deleteProduct(code) {
-    this.products = this.products.filter((product) => product.code !== code);
+   return this.products = this.products.filter((product) => product.code !== code);
   }
 
   updateProduct(code, newTitle, newPrice, newDecription, newThumbnail, newStock) {
@@ -84,5 +84,9 @@ if (product) {
 }
 
 groupOfProducts.updateProduct(1,'calabaza',14 ,'grande y anaranjado','https://imagen.com/calabaza',3 );
+
+groupOfProducts.getProducts();
+
+groupOfProducts.deleteProduct(3);
 
 groupOfProducts.getProducts();
