@@ -1,8 +1,13 @@
+import fs from 'fs';
+
 class ProjectManajer {
+  
   constructor() {
     this.products = [];
-    this.contadorId = 1; // Inicializar el contador de ID en 1
+    this.contadorId = 1; 
   }
+  
+  
 
   addProduct(title, decription, price, thumbnail, stock) {
     const newProduct = {
@@ -14,8 +19,12 @@ class ProjectManajer {
       stock,
     };
     this.products.push(newProduct);
-    this.contadorId++; // Incrementar el contador de ID para el siguiente producto
+    this.contadorId++; 
+    if(newProduct){ 
+      fs.writeFileSync('log.txt', 'A list of product has been added--- ')
+    }
   }
+  
 
   getProductById(code) {
     return this.products.find((product) => product.code === code);
@@ -30,24 +39,40 @@ class ProjectManajer {
   }
 
   deleteProduct(code) {
-   return this.products = this.products.filter((product) => product.code !== code);
+    return (this.products = this.products.filter(
+      (product) => product.code !== code
+    ));
   }
 
-  updateProduct(code, newTitle, newPrice, newDecription, newThumbnail, newStock) {
-    const product = this.products.find(product => product.code === code);
+  updateProduct(
+    code,
+    newTitle,
+    newPrice,
+    newDecription,
+    newThumbnail,
+    newStock
+  ) {
+    const product = this.products.find((product) => product.code === code);
     if (product) {
       product.title = newTitle !== undefined ? newTitle : product.Title;
       product.price = newPrice !== undefined ? newPrice : product.price;
-      product.decription = newThumbnail !== undefined ? newThumbnail : product.thumbnail;
+      product.decription =
+        newThumbnail !== undefined ? newThumbnail : product.thumbnail;
       product.decription = newStock !== undefined ? newStock : product.stock;
-      product.decription = newDecription !== undefined ? newDecription : product.decription;
-      console.log(`Producto ${code} actualizado`);
+      product.decription =
+        newDecription !== undefined ? newDecription : product.decription;
+      fs.appendFileSync('log.txt','A product has been updated --- ') ,console.log(`Producto ${code} actualizado`);
     } else {
-      console.log(`No se encontró ningún producto ${code}`);
+      fs.appendFileSync('./Log', 'An error has occurred when updating a product, please review its syntax --- ') ,console.log(`No se encontró ningún producto ${code}`);
     }
   }
+  
 }
-const groupOfProducts = new ProjectManajer();
+const fecha = new Date().toLocaleDateString();
+const hora = new Date().toLocaleTimeString();
+console.log("Programa iniciado el ", fecha, ", a las ", hora)
+
+const groupOfProducts = new ProjectManajer();  
 
 groupOfProducts.addProduct(
   "manzana",
@@ -80,13 +105,27 @@ if (product) {
     `code: ${product.code}, Name: ${product.title}, Decription: ${product.decription}, Price: ${product.price}, Thumbnail: ${product.thumbnail}, Stock: ${product.stock} `
   );
 } else {
-  console.log("Not Found");
+  fs.appendFileSync('./log.txt', "An  error occurred while searching for products by their ID --- "), console.log("Not Found, Check ErrorLog");
 }
 
-groupOfProducts.updateProduct(1,'calabaza',14 ,'grande y anaranjado','https://imagen.com/calabaza',3 );
+groupOfProducts.updateProduct(
+  1,
+  "calabaza",
+  14,
+  "grande y anaranjado",
+  "https://imagen.com/calabaza",
+  3
+);
+
+const logDelete = groupOfProducts.deleteProduct(3);
+
+if(logDelete){
+  fs.appendFileSync('./log.txt','a product has been deleted --- ')
+}
+
 
 groupOfProducts.getProducts();
 
-groupOfProducts.deleteProduct(3);
 
-groupOfProducts.getProducts();
+
+
